@@ -39,7 +39,7 @@ def Game(word):
 
             inp = raw_input('Letter: ')
             if len(inp) != 1: #not a single charachter
-                Bolean = True
+                Boolean = True
                 system('cls')
             for char in used_letters: #already used that letter
                 if inp.capitalize() == char:
@@ -61,13 +61,24 @@ def Game(word):
         system('cls')
 
         if incorrect == 8:
-            print '''Naww, sadfaec. You didnt get it.
-The word was ''' + word + '''!
-Better luck next time!'''
+            text = '''##############################
+            LOOSE
+The word was:
+''' + word + '''
+Better luck next time!
+##############################
+'''
+            printText(text)
             playAgain()
 
-    print word + '''!\nYou got it! Congratulations!
-It took you '''+str(len(used_letters))+''' tries.'''  #You won! GRATS!
+    text = '''##############################
+	     WIN
+You got it! Congratulations!
+It took you ''' + str(len(used_letters)) + ''' letters
+to get \'''' + word + '''\'
+##############################
+'''
+    printText(text)  #You won! GRATS!
     playAgain()
 
 def render_graphic(i): #just a nice function to render our buddy the stickman
@@ -147,7 +158,7 @@ def Menu(b = False):
 #  [c] Credits           #
 #  [q] Quit              #
 ##########################\n'''
-    printText(text)
+    print text
     if b:
         print 'Invalid choice. Please choose an appropriate option!'
     inp = raw_input('   Choice: ')
@@ -162,11 +173,10 @@ def Menu(b = False):
     else:
         Menu(False)
 
-def printText(text):
+def printText(text, speed = 0.02):
     for character in text:
-        sys.stdout.write(character);sys.stdout.flush(),time.sleep(.01)
+        sys.stdout.write(character);sys.stdout.flush(),time.sleep(speed)
 
 #Application Entry Point
 mode = 0
 Menu()
-
