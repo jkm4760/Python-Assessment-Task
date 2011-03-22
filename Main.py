@@ -58,9 +58,15 @@ def Game(word):
 
         system('cls')
 
-    input('''You got it! Congratulations!
-It took you '''+str(len(used_letters))+''' tries.
-Press Enter to quit...''') #You won! GRATS!
+        if incorrect == 8:
+            print '''Naww, sadfaec. You didnt get it.
+The word was''' + word + '''!
+Better luck next time!'''
+            playAgain()
+
+    print '''You got it! Congratulations!
+It took you '''+str(len(used_letters))+''' tries.'''  #You won! GRATS!
+    playAgain()
 
 def render_graphic(i): #just a nice function to render our buddy the stickman
     graphic = ['\n\n\n\n\n\n\n',
@@ -72,6 +78,21 @@ def render_graphic(i): #just a nice function to render our buddy the stickman
                ' _____\n |   |\n |   O\n |  /|\\\n |\n |\n-|-------',
                ' _____\n |   |\n |   O\n |  /|\\\n |  / \\\n |\n-|-------']
     print graphic[i]
+
+#Who knows? maybe you WANT to be thwarted yet again!
+def playAgain():
+    b = True
+    while b == True:
+        inp = raw_input('\nDo you want to play again?\n   [y/n]: ')
+        if inp.capitalize() == 'Y':
+            system('cls')
+            Main()
+        elif inp.capitalize() == 'N':
+            quit()
+        else:
+            system('cls')
+            print 'Sorry, i don\'t understand that command.'
+            playAgain()
 
 #Entry Function
 def Main():
