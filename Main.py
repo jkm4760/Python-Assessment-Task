@@ -4,6 +4,7 @@
 #################################
 
 from os import system
+from random import randint
 
 #Main Game function
 def Game(word):
@@ -96,8 +97,15 @@ def playAgain():
 
 #Entry Function
 def Main():
-    inp = raw_input('(TEMP) Enter Word: ')
-    Game(inp)
+    #Import our overly-hugemongeous dictionary file. its olnly like 54277 words or so :3
+    dic = open('dictionary.dic', 'r')
+    wordlist = dic.readlines()
+
+    num = randint(0,len(wordlist))
+    word = wordlist[num]
+    word = word[0:len(word)-1] #seems to be adding a mysterious char to the end. this should fix 'er
+    print num, word
+    Game(word)
 
 #Application Entry Point
 Main()
