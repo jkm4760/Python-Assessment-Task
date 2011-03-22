@@ -38,8 +38,8 @@ def Game(word):
             print 'Used: ' + ' '.join(used_letters)
 
             inp = raw_input('Letter: ')
-            if len(inp) != 1: #not a single charachter
-                Bolean = True
+            if not len(inp) == 1: #not a single charachter
+                Boolean = True
                 system('cls')
             for char in used_letters: #already used that letter
                 if inp.capitalize() == char:
@@ -132,7 +132,7 @@ def Credits():
 #      Jamie Stewart     #
 #       ~Zoralord~       #
 ##########################\n'''
-    printText(text)
+    printText(text, 0.02)
     a = raw_input('Press enter to return to menu...')
     Menu()
 
@@ -147,7 +147,7 @@ def Menu(b = False):
 #  [c] Credits           #
 #  [q] Quit              #
 ##########################\n'''
-    printText(text)
+    print text
     if b:
         print 'Invalid choice. Please choose an appropriate option!'
     inp = raw_input('   Choice: ')
@@ -162,9 +162,9 @@ def Menu(b = False):
     else:
         Menu(False)
 
-def printText(text):
+def printText(text, speed):
     for character in text:
-        sys.stdout.write(character);sys.stdout.flush(),time.sleep(.01)
+        sys.stdout.write(character);sys.stdout.flush(),time.sleep(speed)
 
 #Application Entry Point
 mode = 0
