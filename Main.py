@@ -2,12 +2,13 @@
 #     Python Assesment Task 1:  #
 #            Hangman            #
 #################################
-
+import sys, time
 from os import system
 from random import randint
 
 #Main Game function
 def Game(word):
+    system('cls')
     #Read the word into a list for easy editing
     word_ls = []
     for char in word:
@@ -61,11 +62,11 @@ def Game(word):
 
         if incorrect == 8:
             print '''Naww, sadfaec. You didnt get it.
-The word was''' + word + '''!
+The word was ''' + word + '''!
 Better luck next time!'''
             playAgain()
 
-    print '''You got it! Congratulations!
+    print word + '''!\nYou got it! Congratulations!
 It took you '''+str(len(used_letters))+''' tries.'''  #You won! GRATS!
     playAgain()
 
@@ -82,21 +83,27 @@ def render_graphic(i): #just a nice function to render our buddy the stickman
 
 #Who knows? maybe you WANT to be thwarted yet again!
 def playAgain():
+    global mode
+    
     b = True
     while b == True:
         inp = raw_input('\nDo you want to play again?\n   [y/n]: ')
         if inp.capitalize() == 'Y':
             system('cls')
-            Main()
+            if mode == 1:
+                RandomWord()
+            elif mode == 2:
+                CustomWord()
         elif inp.capitalize() == 'N':
-            quit()
+            Menu()
         else:
             system('cls')
             print 'Sorry, i don\'t understand that command.'
             playAgain()
 
 #Entry Function
-def Main():
+def RandomWord():
+    global mode
     #Import our overly-hugemongeous dictionary file. its olnly like 54277 words or so :3
     dic = open('dictionary.dic', 'r')
     wordlist = dic.readlines()
@@ -104,8 +111,62 @@ def Main():
     num = randint(0,len(wordlist))
     word = wordlist[num]
     word = word[0:len(word)-1] #seems to be adding a mysterious char to the end. this should fix 'er
-    print num, word
+    mode = 1
     Game(word)
 
+def CustomWord():
+    global mode
+    system('cls')
+    word = raw_input('Please enter a word or phrase:\n')
+    mode = 2
+    Game(word)
+
+def Credits():
+    system('cls')
+    text = '''##########################
+#        CREDITS         #
+#                        #
+#      Saxon Landers     #
+#    ~AClockWorkLemon~   #
+#                        #
+#      Jamie Stewart     #
+#       ~Zoralord~       #
+##########################\n'''
+    printText(text)
+    a = raw_input('Press enter to return to menu...')
+    Menu()
+
+def Menu(b = False):
+    system('cls')
+    text = '''##########################
+#      PyHangman v1      #
+#                        #
+#  [1] Random word       #
+#  [2] Pick a word       #
+#                        #
+#  [c] Credits           #
+#  [q] Quit              #
+##########################\n'''
+    printText(text)
+    if b:
+        print 'Invalid choice. Please choose an appropriate option!'
+    inp = raw_input('   Choice: ')
+    if inp == '1':
+        RandomWord()
+    elif inp == '2':
+        CustomWord()
+    elif inp.capitalize() == 'C':
+        Credits()
+    elif inp.capitalize() == 'Q':
+        quit()
+    else:
+        Menu(False)
+
+def printText(text):
+    for character in text:
+        sys.stdout.write(character);sys.stdout.flush(),time.sleep(.01)
+
 #Application Entry Point
-Main()
+mode = 0
+Menu()
+
