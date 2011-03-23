@@ -180,4 +180,3 @@ def printText(text, speed = 0.02):
 #Application Entry Point
 mode = 0
 Menu()
-
