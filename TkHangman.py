@@ -41,23 +41,23 @@ class MainWindow(Frame):
 
         #out_img label
         this.out_img = Label(this)
-        this.out_img.pack(expand=YES, fill=BOTH)
+        this.out_img.pack(expand=YES, fill=BOTH, side=TOP)
 
         #out_text Label
-        this.out_text = Label(this)
-        this.out_text.pack(expand=YES, fill=BOTH)
+        this.out_text = Label(this, justify=LEFT)
+        this.out_text.pack(expand=YES, side = TOP)
         
         #Entry field
         thisinp_field = Entry(this, relief=SUNKEN)
-        this.inp_field.pack(expand=NO, fill=BOTH)
-
+        this.inp_field.pack(expand=NO, fill=BOTH, side=TOP)
+        
         #Error Display
-        this.out_err = Label(this, fg='red')
-        this.out_err.pack(expand=YES, fill=BOTH)
+        this.out_err = Label(this, fg='red', justify=LEFT)
+        this.out_err.pack(expand=YES, fill=BOTH, side = BOTTOM)
 
         #Init lists
         #Read the word into a list for easy editing
-        for char in 'Hello world': #REPLACE WITH RANDOM WORD FUNCTION THINGY
+        for char in 'He llo-\'world\'': #REPLACE WITH RANDOM WORD FUNCTION THINGY
             this.word_ls.append(char.capitalize()) #capitalize everything so as to avoid conflicts 
             for i in string.ascii_uppercase:
                 if char.capitalize() == i:
@@ -67,8 +67,15 @@ class MainWindow(Frame):
         for i in this.word_ls:
             if i == ' ':
                 this.display_ls.append(' ')
+            elif i == '-':
+                this.display_ls.append('-')
+            elif i == '\'':
+                this.display_ls.append('\'')
             else:
                 this.display_ls.append('_')
+
+        #initial render
+        this.render()
         
         #bind the enter key to the EnterPressed Function
         this.inp_field.bind('<Return>', this.EnterPressed)
@@ -113,20 +120,22 @@ class MainWindow(Frame):
 
         this.used_letters.append(inp.capitalize()) #We've used this letter now, lets disable it
 
-        this.out_text['text'] = 'Word: ' + ' '.join(this.display_ls) + '\nUsed: ' + ' '.join(this.used_letters)
-        this.out_img['text'] = this.graphic[this.incorrect]
+        this.render()
         
         this.clearInp()
 
-        print this.correct, this.chars
-
         #win/loose conditions
         if this.correct == this.chars:
-            print 'THE GAME'
+            diag = DiagBox(this, 'THE GAME')
+            this.wait_window(diag.top)
             
         if this.incorrect == 8: #CHANGE TO CORRECT NO OF IMGS
-            loss_diag = DiagBox(this, 'LOOSE')
-            this.wait_window(loss_diag.top)
+            diag = DiagBox(this, 'LOOSE')
+            this.wait_window(diag.top)
+
+    def render(this):
+        this.out_text['text'] = 'Word: ' + ' '.join(this.display_ls) + '\nUsed: ' + ' '.join(this.used_letters)
+        this.out_img['text'] = this.graphic[this.incorrect] #TEMP UNTILL IMGS
 
     def clearInp(this, error = ''):
         this.out_err['text'] = error
@@ -143,7 +152,6 @@ class DiagBox:
         
     def ok(this):
         this.top.destroy()
-        print 'test'
 
 #Application entry point
 if __name__ == '__main__':
