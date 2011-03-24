@@ -8,5 +8,8 @@ http://docs.python.org/tutorial/
 'Typewriter' Text output effect (used in the credits function):
 http://www.daniweb.com/software-development/python/code/245053
 
+General TkInter help:
+http://www.pythonware.com/library/tkinter/introduction/
+
 How to load images into Tkinter:
 http://effbot.org/tkinterbook/photoimage.htm
