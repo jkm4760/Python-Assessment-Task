@@ -1,4 +1,5 @@
 from Tkinter import *
+import string
 
 class MainWindow(Frame):
     #vars
@@ -57,9 +58,10 @@ class MainWindow(Frame):
         #Init lists
         #Read the word into a list for easy editing
         for char in 'Hello world': #REPLACE WITH RANDOM WORD FUNCTION THINGY
-            this.word_ls.append(char.capitalize()) #capitalize everything so as to avoid conflicts
-            if char != ' ':
-                this.chars += 1
+            this.word_ls.append(char.capitalize()) #capitalize everything so as to avoid conflicts 
+            for i in string.ascii_uppercase:
+                if char.capitalize() == i:
+                    this.chars += 1
 
         #Initialize a display list
         for i in this.word_ls:
@@ -71,15 +73,17 @@ class MainWindow(Frame):
         #bind the enter key to the EnterPressed Function
         this.inp_field.bind('<Return>', this.EnterPressed)
         #bind keypresses, so we can restrict length
-        this.inp_field.bind('<KeyPress>', this.RestrictLength)
+        this.inp_field.bind('<KeyPress>', this.RestrictKeys)
 
     def setWord(this, newWord):
         this.word = newWord
 
-    def RestrictLength(this, event):
+    def RestrictKeys(this, event):
         inp = this.inp_field.get()
+        
         if len(inp) > 0:
             this.inp_field.delete(0, END)
+        
 
     def EnterPressed(this, event):
         inp = this.inp_field.get()
@@ -89,6 +93,13 @@ class MainWindow(Frame):
                 if inp.capitalize() == char:
                     this.clearInp('You have already used that letter!')
                     return
+        temp = False
+        for char in string.ascii_uppercase:
+            if inp.capitalize() == char:
+                temp = True
+        if temp == False:
+            this.clearInp('Invalid Symbol')
+            return
 
         this.prev_correct = this.correct
 
@@ -107,11 +118,14 @@ class MainWindow(Frame):
         
         this.clearInp()
 
-        print this.incorrect
+        print this.correct, this.chars
 
         #win/loose conditions
+        if this.correct == this.chars:
+            print 'THE GAME'
+            
         if this.incorrect == 8: #CHANGE TO CORRECT NO OF IMGS
-            loss_diag = DiagBox(this)
+            loss_diag = DiagBox(this, 'LOOSE')
             this.wait_window(loss_diag.top)
 
     def clearInp(this, error = ''):
@@ -121,10 +135,10 @@ class MainWindow(Frame):
 
 class DiagBox:
     #TEMPORARY DIAG BOX. WILL REPLACE WITH MESSAGE BOX.
-    def __init__(this, parent):
+    def __init__(this, parent, message='Default'):
 
         top = this.top = Toplevel(parent)
-        b = Button(top, text="OK", command=this.ok)
+        b = Button(top, text=message, command=this.ok)
         b.pack(pady=5)
         
     def ok(this):
