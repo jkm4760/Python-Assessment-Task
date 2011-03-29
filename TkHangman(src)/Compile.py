@@ -1,6 +1,4 @@
 from distutils.core import setup
 import py2exe
 
-setup(console=['TkHangman.pyw'])
-
-input()
+setup(windows=['TkHangman.pyw'])

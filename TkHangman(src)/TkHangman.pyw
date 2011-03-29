@@ -6,7 +6,7 @@ class MainMenu(Frame):
 
     #Constructor
     def __init__(this):
-        Frame.__init__(this, bg='#0099CD')
+        Frame.__init__(this, bg='#CCCCCC')
         this.pack(expand=YES)
         this.master.title('TkHangman v1')
         this.master.iconname('tkhm1')
@@ -26,7 +26,7 @@ class MainMenu(Frame):
         btn_custom.pack(side=TOP)
 
         #spacer
-        Label(this, bg='#0099CD').pack(side=TOP)
+        Label(this, bg='#CCCCCC').pack(side=TOP)
 
         #credits button :)
         btn_random = Button(this, text='Credits', width = 20, command=this.credits)
