@@ -6,14 +6,14 @@ class MainMenu(Frame):
 
     #Constructor
     def __init__(this):
-        Frame.__init__(this, bg='#0099CC')
+        Frame.__init__(this, bg='#0099CD')
         this.pack(expand=YES)
         this.master.title('TkHangman v1')
         this.master.iconname('tkhm1')
-        this.master.iconbitmap("Data\icon.ico")
+        this.master.iconbitmap(".\icon.ico")
 
         #Title :D
-        img = PhotoImage(file='Data\header.gif')
+        img = PhotoImage(file='header.gif')
         title = Label(this, image=img, borderwidth=0)
         title.img = img
         title.pack(side=TOP)
@@ -26,7 +26,7 @@ class MainMenu(Frame):
         btn_custom.pack(side=TOP)
 
         #spacer
-        Label(this, bg='#0099CC').pack(side=TOP)
+        Label(this, bg='#0099CD').pack(side=TOP)
 
         #credits button :)
         btn_random = Button(this, text='Credits', width = 20, command=this.credits)
@@ -34,7 +34,7 @@ class MainMenu(Frame):
 
     def random_word(this):
         #Import our overly-hugemongeous dictionary file. its only like 54277 words or so :3
-        dic = open('Data/dictionary.dic', 'r')
+        dic = open('dictionary.dic', 'r')
         wordlist = dic.readlines()
 
         num = randint(0,len(wordlist))
@@ -95,15 +95,7 @@ class MainWindow(Frame):
     word_ls = []
     display_ls = []
     
-    graphic = ['\n\n\n\n\n\n\n',
-               '\n\n\n\n\n\n---------',
-               '\n |\n |\n |\n |\n |\n-|-------',
-               ' _____\n |\n |\n |\n |\n |\n-|-------',
-               ' _____\n |   |\n |\n |\n |\n |\n-|-------',
-               ' _____\n |   |\n |   O\n |   |\n |\n |\n-|-------',
-               ' _____\n |   |\n |   O\n |  /|\\\n |\n |\n-|-------',
-               ' _____\n |   |\n |   O\n |  /|\\\n |  / \\\n |\n-|-------',
-               ''] #blank padder
+    graphic = [] #Padder
     
     #Constructor
     def __init__(this, word):
@@ -114,7 +106,7 @@ class MainWindow(Frame):
         this.word = word
         
         #Init the frame
-        Frame.__init__(this)
+        Frame.__init__(this, bg='#CCCCCC')
         this.pack(expand=YES, fill=BOTH)
         this.master.title('TkHangman v1')
         this.master.iconname('tkhm1')
@@ -124,15 +116,15 @@ class MainWindow(Frame):
         this.out_img.pack(expand=YES, fill=BOTH, side=TOP)
 
         #out_text Label
-        this.out_text = Label(this, justify=LEFT)
+        this.out_text = Label(this, justify=LEFT, bg='#CCCCCC')
         this.out_text.pack(expand=YES, side = TOP)
         
         #Entry field
-        this.inp_field = Entry(this, relief=SUNKEN)
+        this.inp_field = Entry(this)
         this.inp_field.pack(expand=NO, fill=BOTH, side=TOP)
         
         #Error Display
-        this.out_err = Label(this, fg='red', justify=LEFT)
+        this.out_err = Label(this, fg='red', justify=LEFT, bg='#CCCCCC')
         this.out_err.pack(expand=YES, fill=BOTH, side = BOTTOM)
 
         #Init lists
@@ -175,6 +167,17 @@ class MainWindow(Frame):
         this.chars = 0
         this.word_ls = []
         this.display_ls = []
+        this.graphic = [PhotoImage(file='0.gif'),
+               PhotoImage(file='1.gif'),
+               PhotoImage(file='2.gif'),
+               PhotoImage(file='3.gif'),
+               PhotoImage(file='4.gif'),
+               PhotoImage(file='5.gif'),
+               PhotoImage(file='6.gif'),
+               PhotoImage(file='7.gif'),
+               PhotoImage(file='8.gif'),
+               PhotoImage(file='9.gif'),
+               PhotoImage(file='9.gif')] #Padder
 
     def setWord(this, newWord):
         this.word = newWord
@@ -224,14 +227,14 @@ class MainWindow(Frame):
             creds = MessageBox('You Won!\nIt took you '+str(len(this.used_letters))+' letters to get \''+this.word+'\'.')
             creds.mainloop()
             
-        if this.incorrect == 8: #CHANGE TO CORRECT NO OF IMGS
+        if this.incorrect == 10: #CHANGE TO CORRECT NO OF IMGS
             this.destroy()
             creds = MessageBox('You Lost!\nThe word was \''+this.word+'\'.')
             creds.mainloop()
 
     def render(this):
         this.out_text['text'] = 'Word: ' + ' '.join(this.display_ls) + '\nUsed: ' + ' '.join(this.used_letters)
-        this.out_img['text'] = this.graphic[this.incorrect] #TEMP UNTILL IMGS
+        this.out_img['image'] = this.graphic[this.incorrect]
 
     def clearInp(this, error = ''):
         this.out_err['text'] = error
@@ -256,7 +259,6 @@ class MessageBox(Frame):
         menu.mainloop()
 
 #Application entry point
-if __name__ == '__main__':
-    menu = MainMenu()
-    menu.mainloop()
+menu = MainMenu()
+menu.mainloop()
 #img = PhotoImage(file='index.gif')
