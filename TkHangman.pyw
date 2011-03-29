@@ -1,5 +1,79 @@
 from Tkinter import *
-import string
+import string, tkSimpleDialog
+from random import randint
+
+class MainMenu(Frame):
+
+    #Constructor
+    def __init__(this):
+        Frame.__init__(this, bg='#0099CC')
+        this.pack(expand=YES)
+        this.master.title('TkHangman v1')
+        this.master.iconname('tkhm1')
+        this.master.iconbitmap("Data\icon.ico")
+
+        #Title :D
+        img = PhotoImage(file='Data\header.gif')
+        title = Label(this, image=img, borderwidth=0)
+        title.img = img
+        title.pack(side=TOP)
+
+        #INIT MENU BUTTONS
+        btn_random = Button(this, text='Random Word', width = 20, command=this.random_word)
+        btn_random.pack(side=TOP)
+
+        btn_custom = Button(this, text='Custom Word', width = 20, command=this.custom_word)
+        btn_custom.pack(side=TOP)
+
+        #spacer
+        Label(this, bg='#0099CC').pack(side=TOP)
+
+        #credits button :)
+        btn_random = Button(this, text='Credits', width = 20, command=this.credits)
+        btn_random.pack(side=TOP)
+
+    def random_word(this):
+        #Import our overly-hugemongeous dictionary file. its only like 54277 words or so :3
+        dic = open('Data/dictionary.dic', 'r')
+        wordlist = dic.readlines()
+
+        num = randint(0,len(wordlist))
+        word = wordlist[num]
+        word = word[0:len(word)-1] #seems to be adding a mysterious char to the end. this should fix 'er
+        mode = 1
+        this.destroy()
+        MainWindow(word)
+
+
+    def custom_word(this):
+        inp = tkSimpleDialog.askstring('Custom Word', 'Enter a custom word', parent=this)
+
+        temp = True
+        if inp != None:
+            for char in inp: #check that the input i in bounds
+                for i in string.punctuation:
+                    if char == i:
+                        temp = False
+                for i in string.digits:
+                    if char == i:
+                        temp = False
+                for i in string.whitespace:
+                    if char == i:
+                        temp = False
+        else:
+            temp = False
+            
+        if temp == True:
+            this.destroy()
+            test = MainWindow(inp)
+            test.mainloop()
+
+    def credits(this):
+        this.destroy()
+        creds = MessageBox('Saxon Landers\n~AClockWorkLemon~\n\nJamie Stewart\n~Zoralord~')
+        creds.mainloop()
+        
+
 
 class MainWindow(Frame):
     #vars
@@ -32,7 +106,13 @@ class MainWindow(Frame):
                ''] #blank padder
     
     #Constructor
-    def __init__(this):
+    def __init__(this, word):
+
+        this.reset_vars()
+
+        #set the word :)
+        this.word = word
+        
         #Init the frame
         Frame.__init__(this)
         this.pack(expand=YES, fill=BOTH)
@@ -48,7 +128,7 @@ class MainWindow(Frame):
         this.out_text.pack(expand=YES, side = TOP)
         
         #Entry field
-        thisinp_field = Entry(this, relief=SUNKEN)
+        this.inp_field = Entry(this, relief=SUNKEN)
         this.inp_field.pack(expand=NO, fill=BOTH, side=TOP)
         
         #Error Display
@@ -57,7 +137,7 @@ class MainWindow(Frame):
 
         #Init lists
         #Read the word into a list for easy editing
-        for char in 'He llo-\'world\'': #REPLACE WITH RANDOM WORD FUNCTION THINGY
+        for char in this.word:
             this.word_ls.append(char.capitalize()) #capitalize everything so as to avoid conflicts 
             for i in string.ascii_uppercase:
                 if char.capitalize() == i:
@@ -81,6 +161,20 @@ class MainWindow(Frame):
         this.inp_field.bind('<Return>', this.EnterPressed)
         #bind keypresses, so we can restrict length
         this.inp_field.bind('<KeyPress>', this.RestrictKeys)
+
+    def reset_vars(this):
+        this.out_img = Label()
+        this.out_text = Label()
+        this.out_err = Label()
+        this.inp_field = Entry()
+        this.word = ''
+        this.correct = 0
+        this.incorrect = 0
+        this.used_letters = []
+        this.prev_correct = 0
+        this.chars = 0
+        this.word_ls = []
+        this.display_ls = []
 
     def setWord(this, newWord):
         this.word = newWord
@@ -126,12 +220,14 @@ class MainWindow(Frame):
 
         #win/loose conditions
         if this.correct == this.chars:
-            diag = DiagBox(this, 'THE GAME')
-            this.wait_window(diag.top)
+            this.destroy()
+            creds = MessageBox('You Won!\nIt took you '+str(len(this.used_letters))+' letters to get \''+this.word+'\'.')
+            creds.mainloop()
             
         if this.incorrect == 8: #CHANGE TO CORRECT NO OF IMGS
-            diag = DiagBox(this, 'LOOSE')
-            this.wait_window(diag.top)
+            this.destroy()
+            creds = MessageBox('You Lost!\nThe word was \''+this.word+'\'.')
+            creds.mainloop()
 
     def render(this):
         this.out_text['text'] = 'Word: ' + ' '.join(this.display_ls) + '\nUsed: ' + ' '.join(this.used_letters)
@@ -141,19 +237,26 @@ class MainWindow(Frame):
         this.out_err['text'] = error
         this.inp_field.delete(0, END)
 
+class MessageBox(Frame):
+    #Used to show the player a message
+    def __init__(this, message='Default'):
 
-class DiagBox:
-    #TEMPORARY DIAG BOX. WILL REPLACE WITH MESSAGE BOX.
-    def __init__(this, parent, message='Default'):
-
-        top = this.top = Toplevel(parent)
-        b = Button(top, text=message, command=this.ok)
-        b.pack(pady=5)
+        Frame.__init__(this)
+        this.pack(expand=YES)
+        
+        m = Label(this, text=message)
+        m.pack(side=TOP)
+        
+        b = Button(this, text='OK', command=this.ok)
+        b.pack(side=TOP)
         
     def ok(this):
-        this.top.destroy()
+        this.destroy()
+        menu = MainMenu()
+        menu.mainloop()
 
 #Application entry point
 if __name__ == '__main__':
-    MainWindow().mainloop()
+    menu = MainMenu()
+    menu.mainloop()
 #img = PhotoImage(file='index.gif')
