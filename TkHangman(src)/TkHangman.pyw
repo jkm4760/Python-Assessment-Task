@@ -70,7 +70,7 @@ class MainMenu(Frame):
 
     def credits(this):
         this.destroy()
-        creds = MessageBox('Saxon Landers\n~AClockWorkLemon~\n\nJamie Stewart\n~Zoralord~')
+        creds = MessageBox(PhotoImage(file='credits.gif'),'Saxon Landers\n~AClockWorkLemon~\n\nJamie Stewart\n~Zoralord~')
         creds.mainloop()
         
 
@@ -224,12 +224,12 @@ class MainWindow(Frame):
         #win/loose conditions
         if this.correct == this.chars:
             this.destroy()
-            creds = MessageBox('You Won!\nIt took you '+str(len(this.used_letters))+' letters to get \''+this.word+'\'.')
+            creds = MessageBox(PhotoImage(file='win.gif'),'It took you '+str(len(this.used_letters))+' letters to get \''+this.word+'\'.')
             creds.mainloop()
             
         if this.incorrect == 10: #CHANGE TO CORRECT NO OF IMGS
             this.destroy()
-            creds = MessageBox('You Lost!\nThe word was \''+this.word+'\'.')
+            creds = MessageBox(PhotoImage(file='loose.gif'),'The word was \''+this.word+'\'.')
             creds.mainloop()
 
     def render(this):
@@ -242,12 +242,16 @@ class MainWindow(Frame):
 
 class MessageBox(Frame):
     #Used to show the player a message
-    def __init__(this, message='Default'):
+    def __init__(this, img, message='Default', bgcolour='#CCCCCC'):
 
-        Frame.__init__(this)
+        Frame.__init__(this, bg=bgcolour)
         this.pack(expand=YES)
+
+        title = Label(this, image=img, borderwidth=0)
+        title.img = img
+        title.pack(side=TOP)
         
-        m = Label(this, text=message)
+        m = Label(this, text=message, bg=bgcolour)
         m.pack(side=TOP)
         
         b = Button(this, text='OK', command=this.ok)
