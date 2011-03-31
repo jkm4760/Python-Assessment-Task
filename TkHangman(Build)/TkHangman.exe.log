@@ -1,5 +1,0 @@
-Traceback (most recent call last):
-  File "TkHangman.pyw", line 266, in <module>
-  File "TkHangman.pyw", line 13, in __init__
-  File "Tkinter.pyc", line 1564, in wm_iconbitmap
-_tkinter.TclError: bitmap ".\icon.ico" not defined
